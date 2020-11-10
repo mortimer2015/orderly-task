@@ -22,12 +22,12 @@ import (
 	"context"
 	"time"
 
-	v1alpha1 "k8s.io/Orderly_task/pkg/apis/orderlytask/v1alpha1"
-	scheme "k8s.io/Orderly_task/pkg/generated/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	rest "k8s.io/client-go/rest"
+	v1alpha1 "k8s.io/orderly-task/pkg/apis/orderlytask/v1alpha1"
+	scheme "k8s.io/orderly-task/pkg/generated/clientset/versioned/scheme"
 )
 
 // TasksGetter has a method to return a TaskInterface.
@@ -57,7 +57,7 @@ type tasks struct {
 }
 
 // newTasks returns a Tasks
-func newTasks(c *Orderly_taskV1alpha1Client, namespace string) *tasks {
+func newTasks(c *OrderlytaskV1alpha1Client, namespace string) *tasks {
 	return &tasks{
 		client: c.RESTClient(),
 		ns:     namespace,

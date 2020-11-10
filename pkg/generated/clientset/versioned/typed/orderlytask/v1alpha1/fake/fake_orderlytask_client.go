@@ -19,22 +19,22 @@ limitations under the License.
 package fake
 
 import (
-	v1alpha1 "k8s.io/Orderly_task/pkg/generated/clientset/versioned/typed/orderly_task/v1alpha1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
+	v1alpha1 "k8s.io/orderly-task/pkg/generated/clientset/versioned/typed/orderlytask/v1alpha1"
 )
 
-type FakeOrderly_taskV1alpha1 struct {
+type FakeOrderlytaskV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeOrderly_taskV1alpha1) Tasks(namespace string) v1alpha1.TaskInterface {
+func (c *FakeOrderlytaskV1alpha1) Tasks(namespace string) v1alpha1.TaskInterface {
 	return &FakeTasks{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeOrderly_taskV1alpha1) RESTClient() rest.Interface {
+func (c *FakeOrderlytaskV1alpha1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

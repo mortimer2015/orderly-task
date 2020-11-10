@@ -21,9 +21,9 @@ package externalversions
 import (
 	"fmt"
 
-	v1alpha1 "k8s.io/Orderly_task/pkg/apis/orderlytask/v1alpha1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
+	v1alpha1 "k8s.io/orderly-task/pkg/apis/orderlytask/v1alpha1"
 )
 
 // GenericInformer is type of SharedIndexInformer which will locate and delegate to other
@@ -54,7 +54,7 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 	switch resource {
 	// Group=orderlytask.k8s.io, Version=v1alpha1
 	case v1alpha1.SchemeGroupVersion.WithResource("tasks"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Orderly_task().V1alpha1().Tasks().Informer()}, nil
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Orderlytask().V1alpha1().Tasks().Informer()}, nil
 
 	}
 

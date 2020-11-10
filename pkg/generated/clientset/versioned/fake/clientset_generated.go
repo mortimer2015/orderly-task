@@ -19,14 +19,14 @@ limitations under the License.
 package fake
 
 import (
-	clientset "k8s.io/Orderly_task/pkg/generated/clientset/versioned"
-	orderly_taskv1alpha1 "k8s.io/Orderly_task/pkg/generated/clientset/versioned/typed/orderly_task/v1alpha1"
-	fakeorderly_taskv1alpha1 "k8s.io/Orderly_task/pkg/generated/clientset/versioned/typed/orderly_task/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"
+	clientset "k8s.io/orderly-task/pkg/generated/clientset/versioned"
+	orderlytaskv1alpha1 "k8s.io/orderly-task/pkg/generated/clientset/versioned/typed/orderlytask/v1alpha1"
+	fakeorderlytaskv1alpha1 "k8s.io/orderly-task/pkg/generated/clientset/versioned/typed/orderlytask/v1alpha1/fake"
 )
 
 // NewSimpleClientset returns a clientset that will respond with the provided objects.
@@ -76,7 +76,7 @@ func (c *Clientset) Tracker() testing.ObjectTracker {
 
 var _ clientset.Interface = &Clientset{}
 
-// Orderly_taskV1alpha1 retrieves the Orderly_taskV1alpha1Client
-func (c *Clientset) Orderly_taskV1alpha1() orderly_taskv1alpha1.Orderly_taskV1alpha1Interface {
-	return &fakeorderly_taskv1alpha1.FakeOrderly_taskV1alpha1{Fake: &c.Fake}
+// OrderlytaskV1alpha1 retrieves the OrderlytaskV1alpha1Client
+func (c *Clientset) OrderlytaskV1alpha1() orderlytaskv1alpha1.OrderlytaskV1alpha1Interface {
+	return &fakeorderlytaskv1alpha1.FakeOrderlytaskV1alpha1{Fake: &c.Fake}
 }

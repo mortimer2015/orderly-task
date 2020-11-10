@@ -21,27 +21,27 @@ package versioned
 import (
 	"fmt"
 
-	orderly_taskv1alpha1 "k8s.io/Orderly_task/pkg/generated/clientset/versioned/typed/orderly_task/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
+	orderlytaskv1alpha1 "k8s.io/orderly-task/pkg/generated/clientset/versioned/typed/orderlytask/v1alpha1"
 )
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	Orderly_taskV1alpha1() orderly_taskv1alpha1.Orderly_taskV1alpha1Interface
+	OrderlytaskV1alpha1() orderlytaskv1alpha1.OrderlytaskV1alpha1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	orderly_taskV1alpha1 *orderly_taskv1alpha1.Orderly_taskV1alpha1Client
+	orderlytaskV1alpha1 *orderlytaskv1alpha1.OrderlytaskV1alpha1Client
 }
 
-// Orderly_taskV1alpha1 retrieves the Orderly_taskV1alpha1Client
-func (c *Clientset) Orderly_taskV1alpha1() orderly_taskv1alpha1.Orderly_taskV1alpha1Interface {
-	return c.orderly_taskV1alpha1
+// OrderlytaskV1alpha1 retrieves the OrderlytaskV1alpha1Client
+func (c *Clientset) OrderlytaskV1alpha1() orderlytaskv1alpha1.OrderlytaskV1alpha1Interface {
+	return c.orderlytaskV1alpha1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -65,7 +65,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	}
 	var cs Clientset
 	var err error
-	cs.orderly_taskV1alpha1, err = orderly_taskv1alpha1.NewForConfig(&configShallowCopy)
+	cs.orderlytaskV1alpha1, err = orderlytaskv1alpha1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 // panics if there is an error in the config.
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
-	cs.orderly_taskV1alpha1 = orderly_taskv1alpha1.NewForConfigOrDie(c)
+	cs.orderlytaskV1alpha1 = orderlytaskv1alpha1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
 	return &cs
@@ -90,7 +90,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.orderly_taskV1alpha1 = orderly_taskv1alpha1.New(c)
+	cs.orderlytaskV1alpha1 = orderlytaskv1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

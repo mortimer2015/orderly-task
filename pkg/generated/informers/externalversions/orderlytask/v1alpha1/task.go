@@ -22,14 +22,14 @@ import (
 	"context"
 	time "time"
 
-	Orderlytaskv1alpha1 "k8s.io/Orderly_task/pkg/apis/orderlytask/v1alpha1"
-	versioned "k8s.io/Orderly_task/pkg/generated/clientset/versioned"
-	internalinterfaces "k8s.io/Orderly_task/pkg/generated/informers/externalversions/internalinterfaces"
-	v1alpha1 "k8s.io/Orderly_task/pkg/generated/listers/Orderly_task/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
+	orderlytaskv1alpha1 "k8s.io/orderly-task/pkg/apis/orderlytask/v1alpha1"
+	versioned "k8s.io/orderly-task/pkg/generated/clientset/versioned"
+	internalinterfaces "k8s.io/orderly-task/pkg/generated/informers/externalversions/internalinterfaces"
+	v1alpha1 "k8s.io/orderly-task/pkg/generated/listers/orderlytask/v1alpha1"
 )
 
 // TaskInformer provides access to a shared informer and lister for
@@ -62,16 +62,16 @@ func NewFilteredTaskInformer(client versioned.Interface, namespace string, resyn
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.Orderly_taskV1alpha1().Tasks(namespace).List(context.TODO(), options)
+				return client.OrderlytaskV1alpha1().Tasks(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.Orderly_taskV1alpha1().Tasks(namespace).Watch(context.TODO(), options)
+				return client.OrderlytaskV1alpha1().Tasks(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&Orderlytaskv1alpha1.Task{},
+		&orderlytaskv1alpha1.Task{},
 		resyncPeriod,
 		indexers,
 	)
@@ -82,7 +82,7 @@ func (f *taskInformer) defaultInformer(client versioned.Interface, resyncPeriod 
 }
 
 func (f *taskInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&Orderlytaskv1alpha1.Task{}, f.defaultInformer)
+	return f.factory.InformerFor(&orderlytaskv1alpha1.Task{}, f.defaultInformer)
 }
 
 func (f *taskInformer) Lister() v1alpha1.TaskLister {

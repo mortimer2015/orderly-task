@@ -19,27 +19,27 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1alpha1 "k8s.io/Orderly_task/pkg/apis/orderlytask/v1alpha1"
-	"k8s.io/Orderly_task/pkg/generated/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
+	v1alpha1 "k8s.io/orderly-task/pkg/apis/orderlytask/v1alpha1"
+	"k8s.io/orderly-task/pkg/generated/clientset/versioned/scheme"
 )
 
-type Orderly_taskV1alpha1Interface interface {
+type OrderlytaskV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	TasksGetter
 }
 
-// Orderly_taskV1alpha1Client is used to interact with features provided by the orderlytask.k8s.io group.
-type Orderly_taskV1alpha1Client struct {
+// OrderlytaskV1alpha1Client is used to interact with features provided by the orderlytask.k8s.io group.
+type OrderlytaskV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *Orderly_taskV1alpha1Client) Tasks(namespace string) TaskInterface {
+func (c *OrderlytaskV1alpha1Client) Tasks(namespace string) TaskInterface {
 	return newTasks(c, namespace)
 }
 
-// NewForConfig creates a new Orderly_taskV1alpha1Client for the given config.
-func NewForConfig(c *rest.Config) (*Orderly_taskV1alpha1Client, error) {
+// NewForConfig creates a new OrderlytaskV1alpha1Client for the given config.
+func NewForConfig(c *rest.Config) (*OrderlytaskV1alpha1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -48,12 +48,12 @@ func NewForConfig(c *rest.Config) (*Orderly_taskV1alpha1Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Orderly_taskV1alpha1Client{client}, nil
+	return &OrderlytaskV1alpha1Client{client}, nil
 }
 
-// NewForConfigOrDie creates a new Orderly_taskV1alpha1Client for the given config and
+// NewForConfigOrDie creates a new OrderlytaskV1alpha1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *Orderly_taskV1alpha1Client {
+func NewForConfigOrDie(c *rest.Config) *OrderlytaskV1alpha1Client {
 	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
@@ -61,9 +61,9 @@ func NewForConfigOrDie(c *rest.Config) *Orderly_taskV1alpha1Client {
 	return client
 }
 
-// New creates a new Orderly_taskV1alpha1Client for the given RESTClient.
-func New(c rest.Interface) *Orderly_taskV1alpha1Client {
-	return &Orderly_taskV1alpha1Client{c}
+// New creates a new OrderlytaskV1alpha1Client for the given RESTClient.
+func New(c rest.Interface) *OrderlytaskV1alpha1Client {
+	return &OrderlytaskV1alpha1Client{c}
 }
 
 func setConfigDefaults(config *rest.Config) error {
@@ -81,7 +81,7 @@ func setConfigDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *Orderly_taskV1alpha1Client) RESTClient() rest.Interface {
+func (c *OrderlytaskV1alpha1Client) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}

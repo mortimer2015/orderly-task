@@ -38,7 +38,7 @@ type TaskStatus struct {
 	AvailableReplicas int32 `json:"availableReplicas"`
 }
 
-// +k8s: deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // TaskList is a list of Task resources
 type TaskList struct {

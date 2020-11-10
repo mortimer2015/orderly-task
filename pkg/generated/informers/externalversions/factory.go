@@ -23,13 +23,13 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "k8s.io/Orderly_task/pkg/generated/clientset/versioned"
-	Orderlytask "k8s.io/Orderly_task/pkg/generated/informers/externalversions/Orderly_task"
-	internalinterfaces "k8s.io/Orderly_task/pkg/generated/informers/externalversions/internalinterfaces"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
+	versioned "k8s.io/orderly-task/pkg/generated/clientset/versioned"
+	internalinterfaces "k8s.io/orderly-task/pkg/generated/informers/externalversions/internalinterfaces"
+	orderlytask "k8s.io/orderly-task/pkg/generated/informers/externalversions/orderlytask"
 )
 
 // SharedInformerOption defines the functional option type for SharedInformerFactory.
@@ -172,9 +172,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Orderly_task() Orderlytask.Interface
+	Orderlytask() orderlytask.Interface
 }
 
-func (f *sharedInformerFactory) Orderly_task() Orderlytask.Interface {
-	return Orderlytask.New(f, f.namespace, f.tweakListOptions)
+func (f *sharedInformerFactory) Orderlytask() orderlytask.Interface {
+	return orderlytask.New(f, f.namespace, f.tweakListOptions)
 }
