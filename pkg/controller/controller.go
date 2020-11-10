@@ -34,7 +34,7 @@ const controllerAgentName = "control"
 const (
 	SuccessSynced         = "Synced"
 	MessageResourceSynced = "Student synced successfully"
-	BaseTaskName          = "Task-d67s5ou4a-"
+	BaseTaskName          = "task-d67s5ou4a-"
 )
 
 type Controller struct {
