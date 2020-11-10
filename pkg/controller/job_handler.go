@@ -7,74 +7,46 @@ package controller
 import (
 	"context"
 	"fmt"
-	batchV1 "k8s.io/api/batch/v1"
-	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/klog/v2"
+	"strings"
 )
 
-func jobUpdate(obj interface{}) {
-	job := obj.(v1.Object)
-	//status := job
+func (c *Controller) jobUpdate(obj interface{}) {
+	oObj := obj.(metaV1.Object)
 
-	fmt.Printf("Job handle: %s\n", job.GetName())
-}
-
-var (
-	masterURL  = ""
-	kubeconfig = "/Users/hunter/.kube/config"
-)
-
-func GetClient() *kubernetes.Clientset {
-	cfg, err := clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
+	job, err := c.kubeClientSet.BatchV1().Jobs(oObj.GetNamespace()).Get(context.TODO(), oObj.GetName(), metaV1.GetOptions{})
 	if err != nil {
-		klog.Fatalf("Error building kubeconfig: %s", err.Error())
+		fmt.Println("jobbbbb")
 	}
-	kubeClient, err := kubernetes.NewForConfig(cfg)
-	if err != nil {
-		klog.Fatalf("Error building kubernetes clientset: %s", err.Error())
-	}
-	return kubeClient
-}
+	if job != nil {
+		if strings.HasPrefix(job.Name, BaseTaskName) {
+			complete := false
 
-func jobCreate() {
-	client := GetClient()
-	labels := map[string]string{
-		"app":        "nginx",
-		"controller": "aaa",
-	}
-
-	job := batchV1.Job{
-		ObjectMeta: metaV1.ObjectMeta{
-			Name:      "aaa",
-			Namespace: "aaa",
-		},
-		Spec: batchV1.JobSpec{
-			//Parallelism: 1,
-			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metaV1.ObjectMeta{
-					Labels: labels,
-				},
-				Spec: corev1.PodSpec{
-					Containers: []corev1.Container{
-						{
-							Name:  "aaa",
-							Image: "busybox",
-						},
-					},
-				},
-			},
-		},
-	}
-
-	job1, err := client.BatchV1().Jobs("default").Create(context.TODO(), &job, metaV1.CreateOptions{})
-	if err != nil {
-		fmt.Println("err")
-	} else {
-		fmt.Printf("%s", job1.Name)
+			for _, condition := range job.Status.Conditions {
+				if condition.Type == "Complete" && condition.Status == "True" {
+					complete = true
+				}
+			}
+			if complete == false {
+				return
+			}
+			//task := c.getNextTask(obj)
+			//fmt.Println(task.Name)
+		}
+		//orderlytask.Task
+		fmt.Printf("Job update: %s\n", job.GetName())
 	}
 
 }
+
+//func (c *Controller) getNextTask(obj interface{}) (task *orderlytask.Task) {
+//	selector := labels.Selector()
+//	tasks, err := c.controlsLister.Tasks(obj.Namespace).List(&selector)
+//	if err != nil {
+//
+//	}
+//	for task := range(tasks){
+//		fmt.Println(task.Name)
+//	}
+//	return task
+//}

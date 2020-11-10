@@ -101,7 +101,7 @@ func NewController(
 	jobInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc: controller.add,
 		UpdateFunc: func(old, new interface{}) {
-			jobUpdate(new)
+			controller.jobUpdate(new)
 		},
 		DeleteFunc: controller.delete,
 	})

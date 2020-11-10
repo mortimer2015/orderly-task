@@ -21,6 +21,8 @@ func (c *Controller) taskCreate(obj interface{}) {
 		klog.Error(err.Error())
 	}
 	if task != nil {
+		// TODO 判断是否需要创建job
+
 		job := batchV1.Job{
 			ObjectMeta: metaV1.ObjectMeta{
 				Name:      BaseTaskName + task.Name,
@@ -48,6 +50,7 @@ func (c *Controller) taskUpdate(obj interface{}) {
 		klog.Error("获取task失败")
 		klog.Error(err.Error())
 	}
+
 	if task != nil {
 		job, err := c.kubeClientSet.BatchV1().Jobs(task.Namespace).Get(context.TODO(), BaseTaskName+task.Name,
 			metaV1.GetOptions{})
@@ -76,5 +79,40 @@ func (c *Controller) taskUpdate(obj interface{}) {
 	} else {
 		klog.Info("没有获取到task")
 	}
+}
 
+func (c *Controller) taskDelete(obj interface{}) {
+	oObj := obj.(v1.Object)
+	task, err := c.taskClientSet.OrderlytaskV1alpha1().Tasks(oObj.GetNamespace()).Get(context.TODO(), oObj.GetName(),
+		metaV1.GetOptions{})
+	if err != nil {
+		klog.Error("获取task失败")
+		klog.Error(err.Error())
+	}
+	if task != nil {
+		job, err := c.kubeClientSet.BatchV1().Jobs(task.Namespace).Get(context.TODO(), BaseTaskName+task.Name,
+			metaV1.GetOptions{})
+		if err != nil {
+			klog.Error("获取Job失败")
+			klog.Error(err.Error())
+		}
+
+		if job != nil {
+
+			err := c.kubeClientSet.BatchV1().Jobs(job.Namespace).Delete(context.TODO(), job.Name,
+				metaV1.DeleteOptions{})
+			if err != nil {
+				klog.Error("删除job失败")
+				klog.Error(err.Error())
+			}
+		}
+		// TODO 正在运行的task
+
+		// TODO 移除当前job
+
+		// TODO 下一个任务
+
+	} else {
+		klog.Info("没有获取到task")
+	}
 }
