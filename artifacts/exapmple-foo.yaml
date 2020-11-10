@@ -1,0 +1,7 @@
+apiVersion: orderly-task.k8s.io/v1alpha1
+kind: Task
+metadata:
+  name: example-task1
+spec:
+  deploymentName: example-task1
+  replicas: 1
