@@ -13,6 +13,8 @@ import (
 )
 
 func (c *Controller) taskCreate(obj interface{}) {
+	oObj := obj.(metaV1.Object)
+	klog.Info("新增task：", oObj.GetName())
 	return
 }
 
@@ -83,6 +85,10 @@ func (c *Controller) taskComplete(namespace, taskName string) error {
 		return err
 	}
 	if task != nil {
+		if task.Status.Complete == taskComplete {
+			return nil
+		}
+
 		task.Status.Complete = taskComplete
 		_, err := c.taskClientSet.OrderlytaskV1alpha1().Tasks(task.Namespace).Update(context.TODO(), task,
 			metaV1.UpdateOptions{})
