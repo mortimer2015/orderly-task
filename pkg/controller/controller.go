@@ -35,6 +35,7 @@ const (
 	SuccessSynced         = "Synced"
 	MessageResourceSynced = "Student synced successfully"
 	BaseTaskName          = "task-d67s5ou4a-"
+	taskComplete          = "true"
 )
 
 type Controller struct {

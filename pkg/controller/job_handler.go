@@ -24,26 +24,42 @@ func (c *Controller) jobUpdate(obj interface{}) {
 			fmt.Println("jobbbbb")
 		}
 		if job != nil {
-			// todo 重复代码
-			complete := false
-			for _, condition := range job.Status.Conditions {
-				if condition.Type == "Complete" && condition.Status == "True" {
-					complete = true
+			// 不是完成的任务，结束
+			if !jobIsComplete(job) {
+				return
+			} else {
+				err = c.taskComplete(oObj.GetNamespace(), oObj.GetName()[len(BaseTaskName):])
+				if err != nil {
+					klog.Error("更新task失败")
+					klog.Error(err.Error())
 				}
 			}
-			if complete == false {
-				return
-			}
-			// 获取下一个等待执行的任务
-			task, err := c.getNextTask(obj)
-			if err != nil {
-				klog.Error(err.Error())
-				return
-			}
-
-			// 创建新的job
-			klog.Info("Job update: ", task.Name)
+			c.judgeAndRunJob(obj)
 		}
+	}
+}
+
+func (c *Controller) judgeAndRunJob(obj interface{}) {
+	// 判断是否有job未完成，未完成则退出
+	runJob, err := c.getRunJob(obj)
+	if err != nil {
+	}
+	if runJob != nil && runJob.Name != "" {
+		return
+	}
+
+	// 获取下一个等待执行的任务
+	task, err := c.getNextTask(obj)
+	if err != nil {
+		klog.Error(err.Error())
+		return
+	}
+
+	// 创建新的job
+	err = c.jobCreate(task)
+	if err != nil {
+		klog.Error("创建job失败")
+		klog.Error(err.Error())
 	}
 }
 
@@ -61,7 +77,7 @@ func (c *Controller) getNextTask(obj interface{}) (*orderlytask.Task, error) {
 		haveTask := false
 		for _, task := range taskList.Items {
 			//fmt.Println(task.Name)
-			if task.Status.Complete != "true" && task.Spec.Order <= retTask.Spec.Order {
+			if task.Status.Complete != taskComplete && task.Spec.Order <= retTask.Spec.Order {
 				retTask = task
 				haveTask = true
 			}
@@ -78,7 +94,7 @@ func (c *Controller) getNextTask(obj interface{}) (*orderlytask.Task, error) {
 
 }
 
-func jobIsComplete(job batchv1.Job) bool {
+func jobIsComplete(job *batchv1.Job) bool {
 	for _, condition := range job.Status.Conditions {
 		if condition.Type == "Complete" && condition.Status == "True" {
 			return true
@@ -96,7 +112,7 @@ func (c *Controller) getRunJob(obj interface{}) (*batchv1.Job, error) {
 
 	if jobList != nil {
 		for _, job := range jobList.Items {
-			if strings.HasPrefix(job.Name, BaseTaskName) && !jobIsComplete(job) {
+			if strings.HasPrefix(job.Name, BaseTaskName) && !jobIsComplete(&job) {
 				return &job, nil
 			}
 		}

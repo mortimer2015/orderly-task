@@ -6,8 +6,7 @@ package controller
 
 import (
 	"context"
-	"strings"
-
+	"errors"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2"
@@ -20,11 +19,6 @@ func (c *Controller) taskCreate(obj interface{}) {
 func (c *Controller) taskUpdate(obj interface{}) {
 	oObj := obj.(v1.Object)
 
-	// 非task任务不处理
-	if !strings.HasPrefix(oObj.GetName(), BaseTaskName) {
-		return
-	}
-
 	// 判断是否有正在运行的job
 	job, err := c.getRunJob(obj)
 	if err != nil {
@@ -32,7 +26,6 @@ func (c *Controller) taskUpdate(obj interface{}) {
 		//return
 	}
 	if job != nil {
-
 		task, err := c.taskClientSet.OrderlytaskV1alpha1().Tasks(oObj.GetNamespace()).Get(context.TODO(), oObj.GetName(),
 			metaV1.GetOptions{})
 		if err != nil {
@@ -40,24 +33,17 @@ func (c *Controller) taskUpdate(obj interface{}) {
 			klog.Error(err.Error())
 		}
 		// 有正在运行的job
-		if job.Name != "" {
+		if job.Name == BaseTaskName+oObj.GetName() {
 			// task和job对应时，更新job
-			if job.Name == BaseTaskName+oObj.GetName() {
-				err := c.updateJob(job, task)
-				if err != nil {
-					klog.Error(err.Error())
-				}
-			}
-		} else {
-			// 没有正在运行的job
-			err := c.jobCreate(task)
+			err := c.updateJob(job, task)
 			if err != nil {
-				klog.Error("创建任务失败")
 				klog.Error(err.Error())
 			}
+		} else {
+			// 判断是否有其他正在运行的job，没有则创建
+			c.judgeAndRunJob(obj)
 		}
 	}
-
 }
 
 func (c *Controller) taskDelete(obj interface{}) {
@@ -88,5 +74,24 @@ func (c *Controller) taskDelete(obj interface{}) {
 
 	} else {
 		klog.Info("没有获取到task")
+	}
+}
+
+func (c *Controller) taskComplete(namespace, taskName string) error {
+	task, err := c.taskClientSet.OrderlytaskV1alpha1().Tasks(namespace).Get(context.TODO(), taskName, metaV1.GetOptions{})
+	if err != nil {
+		return err
+	}
+	if task != nil {
+		task.Status.Complete = taskComplete
+		_, err := c.taskClientSet.OrderlytaskV1alpha1().Tasks(task.Namespace).Update(context.TODO(), task,
+			metaV1.UpdateOptions{})
+		if err != nil {
+			return err
+		} else {
+			return nil
+		}
+	} else {
+		return errors.New("未获取到task")
 	}
 }
