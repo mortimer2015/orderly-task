@@ -29,13 +29,19 @@ type Task struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   batchv1.JobSpec `json:"spec"`
-	Status TaskStatus      `json:"status"`
+	Spec   TaskSpec   `json:"spec"`
+	Status TaskStatus `json:"status"`
+}
+
+// TaskSpec is the spec for a Task resource
+type TaskSpec struct {
+	JobSpec batchv1.JobSpec `json:"jobSpec"`
+	Order   string          `json:"order"`
 }
 
 // TaskStatus is the status for a Task resource
 type TaskStatus struct {
-	AvailableReplicas int32 `json:"availableReplicas"`
+	Complete string `json:"complete"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

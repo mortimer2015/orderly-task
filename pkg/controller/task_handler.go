@@ -23,12 +23,13 @@ func (c *Controller) taskCreate(obj interface{}) {
 	if task != nil {
 		// TODO 判断是否需要创建job
 
+		// TODO LabelSelector需要优化
 		job := batchV1.Job{
 			ObjectMeta: metaV1.ObjectMeta{
 				Name:      BaseTaskName + task.Name,
 				Namespace: task.Namespace,
 			},
-			Spec: task.Spec,
+			Spec: task.Spec.JobSpec,
 		}
 		job1, err := c.kubeClientSet.BatchV1().Jobs("default").Create(context.TODO(), &job, metaV1.CreateOptions{})
 		if err != nil {
@@ -62,7 +63,7 @@ func (c *Controller) taskUpdate(obj interface{}) {
 		if job != nil {
 			tmpSelector := job.Spec.Selector
 			tmpTemplateLabels := job.Spec.Template.Labels
-			job.Spec = task.Spec
+			job.Spec = task.Spec.JobSpec
 			job.Spec.Selector = tmpSelector
 			job.Spec.Template.Labels = tmpTemplateLabels
 
