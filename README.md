@@ -15,7 +15,8 @@
 2.  cd $GOPATH/src/k8s.io
 3.  git clone https://github.com/mortimer2015/orderly-task.git
 4.  cd orderly-task
-5.  go run cmd/orderly-task/main.go --master="" --kubeconfig="~/.kube/config"
+5.  go mod vendor
+6.  go run cmd/orderly-task/main.go --master="" --kubeconfig="~/.kube/config"
 
 #### 使用说明
 
