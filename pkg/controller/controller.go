@@ -112,17 +112,17 @@ func NewController(
 
 func (c *Controller) add(obj interface{}) {
 	oObj := obj.(v1.Object)
-	fmt.Printf("add task: %s\n", oObj.GetName())
+	fmt.Printf("add some: %s\n", oObj.GetName())
 }
 
 func (c *Controller) update(obj interface{}) {
 	oObj := obj.(v1.Object)
-	fmt.Printf("update task: %s\n", oObj.GetName())
+	fmt.Printf("update some: %s\n", oObj.GetName())
 }
 
 func (c *Controller) delete(obj interface{}) {
 	oObj := obj.(v1.Object)
-	fmt.Printf("delete task: %s\n", oObj.GetName())
+	fmt.Printf("delete some: %s\n", oObj.GetName())
 }
 
 func (c *Controller) Run(threadiness int, stopCh <-chan struct{}) error {
