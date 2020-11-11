@@ -1,0 +1,17 @@
+apiVersion: orderlytask.k8s.io/v1alpha1
+kind: Task
+metadata:
+  name: example-task10
+spec:
+  jobSpec:
+    parallelism: 2
+    template:
+      metadata:
+        name: myjob
+      spec:
+        containers:
+          - name: hello
+            image: busybox
+            command: [ "sleep", "60" ]
+        restartPolicy: OnFailure
+  order: 10

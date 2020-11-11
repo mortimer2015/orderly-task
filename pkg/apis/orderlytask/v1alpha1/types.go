@@ -36,7 +36,7 @@ type Task struct {
 // TaskSpec is the spec for a Task resource
 type TaskSpec struct {
 	JobSpec batchv1.JobSpec `json:"jobSpec"`
-	Order   string          `json:"order"`
+	Order   int32           `json:"order"`
 }
 
 // TaskStatus is the status for a Task resource
