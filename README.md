@@ -23,7 +23,7 @@
 3.  task创建示例参考artifacts/example-foo5.yaml和artifacts/example-foo10.yaml
 4.  如artifacts/example-foo5.yaml的中的`order: 5`是定义task的执行顺序，由小到大逐步执行，`jobSpec`的格式和Job的Spec定义格式完全一致
 5.  如果想使用多个不同task组，只需在不同的命名空间下创建task即可，本controller会自动按照不同的命名空间进行各自task的调度
-6.  二进制包下载地址https://github.com/mortimer2015/orderly-task/releases/download/v1.0/orderly-task.tgz
+6.  mac版二进制包下载地址https://github.com/mortimer2015/orderly-task/releases/download/v1.0/orderly-task.tgz
 
 #### 参与贡献
 
