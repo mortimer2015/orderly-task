@@ -26,6 +26,9 @@
 4.  如artifacts/example-foo5.yaml的中的`order`是定义task的执行顺序，由小到大逐步执行，`jobSpec`的格式和Job的Spec定义格式完全一致
 5.  如果想使用多个不同task组，只需在不同的命名空间下创建task即可，本controller会自动按照不同的命名空间进行各自task的调度
 6.  mac版二进制包下载，请查看Release
+7.  创建CRD`kubectl apply -f artifacts/crd.yaml`
+8.  创建task`kubectl apply -f artifacts/example-foo5.yaml`
+9.  查看task`kubectl get task`
 
 #### 参与贡献
 
