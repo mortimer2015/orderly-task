@@ -9,3 +9,14 @@ spec:
     kind: Task
     plural: tasks
   scope: Namespaced
+  additionalPrinterColumns:
+  - name: Order
+    type: integer
+    description: task order
+    JSONPath: .spec.order
+  - name: Age
+    type: date
+    JSONPath: .metadata.creationTimestamp
+  - name: Complete
+    type: string
+    JSONPath: .status.complete
