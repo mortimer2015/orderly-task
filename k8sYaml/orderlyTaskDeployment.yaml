@@ -1,0 +1,14 @@
+apiVerison: apps/v1
+kind: Deployment
+metadata:
+  name: oderly-task
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: oderly-task
+    spec:
+      containers:
+        - name: oderly-task
+          image: harbor.hlj.plfeng.cn/devops/sw-nginx:v1
