@@ -4,14 +4,14 @@ metadata:
   name: example-task10
 spec:
   jobSpec:
-    parallelism: 2
+    parallelism: 1
     template:
       metadata:
         name: myjob
       spec:
         containers:
           - name: hello
-            image: busybox
+            image: busybox:1.33.1
             command: [ "sleep", "60" ]
         restartPolicy: OnFailure
   order: 10

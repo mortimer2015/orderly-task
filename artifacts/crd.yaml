@@ -17,6 +17,6 @@ spec:
   - name: Age
     type: date
     JSONPath: .metadata.creationTimestamp
-  - name: Complete
+  - name: Completed
     type: string
     JSONPath: .status.complete

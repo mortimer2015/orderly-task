@@ -1,14 +1,31 @@
-apiVerison: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: oderly-task
+  namespace: kube-system
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: oderly-task
   template:
     metadata:
       labels:
         app: oderly-task
     spec:
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
       containers:
-        - name: oderly-task
-          image: harbor.hlj.plfeng.cn/devops/sw-nginx:v1
+      - name: oderly-task
+        image: docker.io/orderlytask:v9
+        volumeMounts:
+        - name: controller-config
+          mountPath: /conf
+      volumes:
+      - name: controller-config
+        hostPath:
+          path: /etc/kubernetes
+          type: Directory
+      nodeSelector:
+        node-role.kubernetes.io/master: ""

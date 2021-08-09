@@ -1,7 +1,5 @@
-FROM centos:7
+FROM busybox:1.33.1
 
 COPY cmd/orderlytask/orderlytask /orderlytask
 
-RUN chmod +x /orderlytask
-
-CMD ["/orderlytask", "--master=''", "--kubeconfig='/config'"]
+CMD ["/orderlytask", "--master=", "--kubeconfig=/conf/admin.conf"]

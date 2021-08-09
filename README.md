@@ -30,6 +30,11 @@
 8.  创建task`kubectl apply -f artifacts/example-foo5.yaml`
 9.  查看task`kubectl get task`
 
+#### Dockerfile使用
+
+1.  编译`CGO_ENABLED=0 go build --ldflags "-extldflags -static"`，禁用cgo，因为默认镜像使用的busybox
+2.  docker build -t docker.io/orderlytask:v9 .
+
 #### 参与贡献
 
 1.  Fork 本仓库
